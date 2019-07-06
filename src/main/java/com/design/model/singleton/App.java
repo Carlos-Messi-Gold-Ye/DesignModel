@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
  * @author : zhaoyan.ye (zhaoyan.ye@ucarinc.com)
  * @since : 2019-07-03 15:03:47
  **/
-public class Main {
+public class App {
 
     private static ExecutorService executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE,
             60L, TimeUnit.SECONDS,
