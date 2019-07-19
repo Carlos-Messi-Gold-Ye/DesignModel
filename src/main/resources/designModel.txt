@@ -22,10 +22,11 @@
     7.	单一职责
 
 模式分类
-    1.创建模式
+    1.创建型模式（Creational Patterns）
         负责对象实体的创建，使得对象的创建过程相对调用者透明化
-    2.结构模式
 
-    3.行为模式
+    2.结构型模式（Structural Patterns）
+
+    3.行为型模式（Behavioral Patterns）
 
 

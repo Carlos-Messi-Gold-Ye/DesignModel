@@ -1,0 +1,16 @@
+模板方法模式（Template Method Pattern）行为型模式
+Define the skeleton of an algorithm in an operation, deferring some steps to subclasses.
+Template Method lets subclass redefine certain steps of an algorithm without changing the algorithm's structure.
+定义一个操作的算法框架，并将一些步骤延迟到子类去现实，使得子类可以不改变一个算法的结构便可以重新定义算法中的某些步骤。
+
+优点：
+    1.封装不变部分，扩展可变部分
+    2.提取公共部分代码，易于维护
+    3.整体行为由父类控制，细节有子类决定
+
+适用场景：
+    1.多个子类有公有的方法，且逻辑基本相同时
+    2.重构中，经常适用
+
+钩子方法：(Hook Method)
+    有时候，某一个行为，部分子类是一样的，这时候，不需要每个子类都去现实具体实现，父类中预先设计好一个默认现实，行为特别的子类可自行重写，其他沿用父类实现

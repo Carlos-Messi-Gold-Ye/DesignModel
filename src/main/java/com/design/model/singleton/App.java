@@ -20,8 +20,7 @@ public class App {
     public static void main(String[] args) {
         for (int i = 0; i < 1000; i++) {
             executor.submit(() -> {
-                LazyInsecuritySingleton.getInstance();
-                LazySecuritySingleton.getInstance();
+                LazySingleton.getInstance();
                 HungrySingleton.getInstance();
                 DCLSingleton.getInstance();
                 StaticInnerClassSingleton.getInstance();

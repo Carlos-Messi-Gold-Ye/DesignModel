@@ -9,16 +9,16 @@ package com.design.model.singleton;
  * @author : zhaoyan.ye (zhaoyan.ye@ucarinc.com)
  * @since : 2019-07-03 11:16:32
  **/
-public class LazySecuritySingleton {
-    private static LazySecuritySingleton instance;
+public class LazySingleton {
+    private static LazySingleton instance;
 
-    private LazySecuritySingleton() {
-        System.out.println("LazySecuritySingleton初始化");
+    private LazySingleton() {
+        System.out.println("LazySingleton初始化");
     }
 
-    public static synchronized LazySecuritySingleton getInstance() {
+    public static synchronized LazySingleton getInstance() {
         if (instance == null) {
-            instance = new LazySecuritySingleton();
+            instance = new LazySingleton();
         }
         return instance;
     }

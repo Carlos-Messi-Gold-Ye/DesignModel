@@ -1,0 +1,11 @@
+@startuml
+class Singleton {
+    .. 私有实体对象 ..
+    - Singleton instance
+    .. 私有构造方法 ..
+    - Singleton()
+    .. 公共静态获取实体方法 ..
+    {static} + Singleton getInstance()
+}
+Singleton <|-- Singleton
+@enduml

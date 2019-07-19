@@ -1,0 +1,25 @@
+建造者模式（Builder Pattern），创建型模式
+Separate the construction of a complex object from its representation
+so that the same construction process can create different representations.
+将一个复杂对象的构建与它的表示分离，使得同样的构建过程可以创建不同的表示。
+建造者模式的链式写法很吸引人，一下子写太多也显的很臃肿。
+
+优点：
+    1.封装性
+    2.建造者独立，容易扩展
+    3.便于控制细节风险
+
+缺点：
+    1、产品必须有共同点，范围有限制。
+    2、如内部变化复杂，会有很多的建造类。
+
+使用场景：
+    1、需要生成的对象具有复杂的内部结构。
+    2、需要生成的对象内部属性本身相互依赖。
+    3、属性很多，而且有些必填，有些选填的，这个模式会使代码清晰很多
+
+工厂模式的区别：
+    建造者模式更加关注与零件装配的顺序。
+    工厂侧重点是创建，创建零部件是它的主要职责，组装顺序不关系。
+
+强烈建议读者使用 lombok，代码干净清爽很多。

@@ -24,7 +24,7 @@ Ensure a class has only one instance, and provide a global point of access to it
 多线程安全需要考虑，单例模式的实现方式
     1.懒汉式非线程安全
     2.懒汉式线程安全
-    3.饿汉式
+    3.饿汉式 （IDEA创建适用这种）
     4.双检锁/双重校验锁
     5.登记式/静态内部类
     6.枚举
