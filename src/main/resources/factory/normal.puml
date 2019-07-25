@@ -1,26 +1,29 @@
 @startuml
-
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
-
-List <|-- AbstractList
-Collection <|-- AbstractCollection
-
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-
-class ArrayList {
-Object[] elementData
-size()
+interface Vehicle {
+    void doSomething()
+}
+class Vehicle550 implements Vehicle {
+    +void doSomething()
+}
+class Vehicle551 implements Vehicle {
+    +void doSomething()
+}
+class Vehicle552 implements Vehicle {
+    +void doSomething()
+}
+class Vehicle553 implements Vehicle {
+    +void doSomething()
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+interface VehicleFactory {
+    Vehicle createVehicle(String version)
+}
+class EvenVehicleFactory implements VehicleFactory {
+    +Vehicle createVehicle(String version)
+}
+class OddVehicleFactory implements VehicleFactory {
+    +Vehicle createVehicle(String version)
 }
 
+VehicleFactory  <..* Vehicle
 @enduml

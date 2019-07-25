@@ -1,0 +1,51 @@
+@startuml
+interface Vehicle {
+    void doSomething()
+}
+class Vehicle550 implements Vehicle {
+    +void doSomething()
+}
+class Vehicle551 implements Vehicle {
+    +void doSomething()
+}
+class Vehicle552 implements Vehicle {
+    +void doSomething()
+}
+class Vehicle553 implements Vehicle {
+    +void doSomething()
+}
+
+interface ZucheFactory {
+    Dept createDept();
+    Vehicle createVehicle();
+}
+
+class Zuche551Factory implements ZucheFactory {
+    +Dept createDept();
+    +Vehicle createVehicle();
+}
+
+class Zuche552Factory implements ZucheFactory {
+    +Dept createDept();
+    +Vehicle createVehicle();
+}
+
+interface Dept {
+    void info()
+}
+class Dept550 implements Dept {
+    +void info()
+}
+class Dept551 implements Dept {
+    +void info()
+}
+class Dept552 implements Dept {
+    +void info()
+}
+class Dept553 implements Dept {
+    +void info()
+}
+
+ZucheFactory  <..* Vehicle
+ZucheFactory  <..* Dept
+@enduml

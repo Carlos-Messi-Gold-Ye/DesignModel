@@ -1,0 +1,17 @@
+@startuml
+interface Vehicle {
+    void doSomething()
+}
+class Vehicle550 implements Vehicle {
+    +void doSomething()
+}
+class Vehicle551 implements Vehicle {
+    +void doSomething()
+}
+
+class SimpleVehicleFactory {
+    +{static} Vehicle createVehicle(String version);
+}
+
+SimpleVehicleFactory  <..* Vehicle
+@enduml
