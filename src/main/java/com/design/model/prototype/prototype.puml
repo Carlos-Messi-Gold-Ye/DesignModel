@@ -1,0 +1,11 @@
+@startuml
+
+class Prototype implements Cloneable {
+    +clone()
+}
+class ConcretePrototype{
+}
+
+
+Prototype <|-- ConcretePrototype :clone
+@enduml

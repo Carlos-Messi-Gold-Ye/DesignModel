@@ -1,0 +1,42 @@
+@startuml
+
+abstract class Corp {
+    + {abstract} String operation();
+}
+
+class Branch extends Corp{
+    + void addSubCorp(Corp corp);
+    + List<Corp> getCorpList();
+}
+
+class Leaf extends Corp{
+}
+
+Branch o--> Corp
+
+class Component {
+    - String name;
+    - String dept;
+    - int salary;
+    - Component parent;
+
+    + Component(String name, String dept, int salary);
+    + String operation();
+    + Component getParent();
+    + void setParent(Component parent);
+}
+
+class Composite extends Component {
+
+    - List<Component> componentList;
+
+    + Composite(String name, String dept, int salary);
+    + void addSubComponent(Component component);
+    + List<Component> getComponentList();
+}
+
+Composite o--> Component
+
+
+
+@enduml

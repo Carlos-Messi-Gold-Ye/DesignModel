@@ -1,0 +1,48 @@
+@startuml
+
+interface IPay {
+    void pay();
+}
+
+class PayUtilities implements IPay {
+    - String name;
+
+    + PayUtilities(String name)
+    + void pay()
+}
+
+class PayAipayProxy implements IPay {
+    private IPay pay;
+
+    public PayAipayProxy(IPay pay)
+
+    public void pay()
+}
+PayUtilities --o PayAipayProxy
+
+interface ICharge {
+    void charge();
+}
+
+class ChargeGas implements ICharge {
+    - String name;
+
+    + ChargeGas(String name)
+    + void charge()
+}
+
+class DynamicProxy implements InvocationHandler {
+
+    - ICharge iCharge
+
+    + DynamicProxy(ICharge iCharge)
+    + Object invoke(Object proxy, Method method, Object[] args) throws Throwable
+}
+
+class Proxy {
+    + {static} Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces,InvocationHandler h)
+}
+
+Proxy *..> DynamicProxy
+ChargeGas <.. Proxy
+@enduml

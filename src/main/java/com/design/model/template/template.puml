@@ -1,0 +1,29 @@
+@startuml
+
+abstract class AbstractLife {
+
+    # void wake()
+    # void eat()
+    # void sleep()
+    # {abstract} void other()
+    + void oneDayInLife()
+}
+
+class CoderLife extends AbstractLife {
+
+    - String name;
+
+    + CoderLife(String name)
+    # void other();
+}
+
+class SonRichLife extends AbstractLife {
+
+    private String name;
+
+    public SonRichLife(String name)
+    protected void eat()
+    protected void other()
+}
+
+@enduml

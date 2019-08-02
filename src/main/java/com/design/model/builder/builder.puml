@@ -1,0 +1,26 @@
+@startuml
+
+class User {
+    - String name
+    - String password
+    - String mobile
+
+    + User(final String name, final String password, final String mobile)
+}
+
+class UserBuilder {
+    - String name;
+    - String password;
+    - String mobile;
+
+    + UserBuilder()
+    + UserBuilder name(final String name)
+    + UserBuilder password(final String password)
+    + UserBuilder mobile(final String mobile)
+    + UserBuilder check()
+    + User build()
+}
+
+UserBuilder  ..> User
+
+@enduml
