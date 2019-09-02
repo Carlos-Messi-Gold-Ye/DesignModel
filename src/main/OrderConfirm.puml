@@ -1,0 +1,491 @@
+@startuml
+
+class LoginInfoUtil {
+    + {static} int getUserOrPartnerMemberId(int paramMemberId)
+}
+
+class GetBaseMemberInfoRE implements Serializable {
+    - String cardtype; 身份证件类型 [身份证、军官证、护照...]
+    - Integer status; 会员状态 [未验证、验证通过、验证有效...]
+    getter()
+    setter()
+}
+
+class CrmClient {
+    + {static} GetBaseMemberInfoRE getBaseMemberInfo(Long memberId)
+}
+class OrderHelper {
+    + {static} Integer getRealDtptCityId(Integer deptId, int cityId)
+}
+
+class ToOrderConfirmParamBuilder {
+
+    - {static} final int DAILY-RENT-MAX-DAY = 27;
+    - {static} final int DAILY-MIN-HOUR = 4 * 60;
+    - {static} final int DAILY-RENT-MAX-MINUTE = 27 * 60 * 24;
+
+    - int memberId; 会员ID
+    - String cid; 请求cid
+    - String cardType; 身份证件类型 [身份证、军官证、护照...]
+    - Integer memberStatus; 会员状态 [未验证、验证通过、验证有效...]
+    - ToOrderConfirmParam param; 入参对象
+    - int dayDiff; 租车天数
+    - long dateDiff; 租车分钟数（去掉整天）
+    - Integer orderType; 租期类型 [日租、月租、套餐...]
+    - Integer takeCityId; 取车城市ID
+    - Integer returnCityId; 还车城市ID
+    - Integer origin; 数据来源 [门店、APP、WAP...]
+
+    - ToOrderConfirmParamBuilder();
+    + {static} ToOrderConfirmParamBuilder of()
+    + ToOrderConfirmParamBuilder memberId(int memberId)
+    + ToOrderConfirmParamBuilder checkMemberId()
+    + ToOrderConfirmParamBuilder cardType(String cardType)
+    + ToOrderConfirmParamBuilder cid(String cid)
+    + ToOrderConfirmParamBuilder memberStatus(Integer memberStatus)
+    + ToOrderConfirmParamBuilder checkCidAndCardTypeAndStatus()
+    - boolean isIdCard()
+    - boolean isNoPassStatus()
+    - boolean isNoStartWith400Or700()
+    + ToOrderConfirmParamBuilder param(ToOrderConfirmParam param)
+    + ToOrderConfirmParamBuilder checkParam()
+    + ToOrderConfirmParamBuilder dateDiff()
+    + ToOrderConfirmParamBuilder checkTypeAndDate()
+    - boolean isTryDriveAndRentTermTypeDaily(Integer orderType, Integer type)
+    + ToOrderConfirmParamBuilder orderType()
+    - boolean isNotTryDriveAndRentTermTypeDaily(Integer orderType, Integer type)
+    + ToOrderConfirmParamBuilder returnCityId()
+    + ToOrderConfirmParamBuilder takeCityId()
+    + ToOrderConfirmParamBuilder origin(Integer origin)
+
+    + ToOrderConfirmParam build()
+}
+
+class ToOrderConfirmParam {
+    - int takeCityId;
+    - int takeDeptId;
+    - String returnDate;
+    - String takeDate;
+    - Integer orderType;
+    - Integer type;
+    - int returnCityId;
+    - int returnDeptId;
+}
+
+CrmClient ..> GetBaseMemberInfoRE
+LoginInfoUtil ..> ToOrderConfirmParamBuilder
+GetBaseMemberInfoRE ..> ToOrderConfirmParamBuilder
+OrderHelper ..> ToOrderConfirmParamBuilder
+ToOrderConfirmParam ..> ToOrderConfirmParamBuilder
+
+ToOrderConfirmParamBuilder --> ToOrderConfirmParam
+
+class CarAdminApiClient {
+    + {static} GetDeptDetailRE getDeptDetail(String caller, Integer deptId)
+}
+
+class GetDeptDetailRE {
+    - Integer cityId; 门店ID
+    - Integer isChain; 加盟店标识
+    getter()
+    setter()
+}
+
+class SrmsConstant {
+    + {static} Map<Integer, Integer[]> getVirtualCityMap()
+}
+
+abstract class AbstractOrderConfirmRemoteParamBuilder {
+    # Integer takeDeptId; 取车门店ID
+    # Integer returnDeptId; 还车门店ID
+    # Date takeDate; 取车时间
+    # Date returnDate; 还车时间
+    # Integer orderType; 租期类型 [日租、月租、套餐...]
+    # Integer takeCityId; 取车城市ID
+    # Integer returnCityId; 还车城市ID
+    # Double pickLongitude; 取车经度
+    # Double pickLatitude; 取车纬度
+    # Double returnLongitude; 还车经度
+    # Double returnLatitude; 还车纬度
+    # Integer memberId; 会员ID
+    # Integer vehicleModelId; 车型ID
+
+    + AbstractOrderConfirmRemoteParamBuilder takeDeptId(Integer takeDeptId)
+    + AbstractOrderConfirmRemoteParamBuilder returnDeptId(Integer returnDeptId)
+    + AbstractOrderConfirmRemoteParamBuilder takeDate(String takeDate)
+    + AbstractOrderConfirmRemoteParamBuilder returnDate(String returnDate)
+    + AbstractOrderConfirmRemoteParamBuilder orderType(Integer orderType)
+    + AbstractOrderConfirmRemoteParamBuilder takeCityId(int takeCityId, Map<Integer, Integer[]> virtualCityMap, Integer deptInfoTakeCityId)
+    + AbstractOrderConfirmRemoteParamBuilder returnCityId(int returnCityId, Map<Integer, Integer[]> virtualCityMap, Integer deptInfoReturnCityId)
+    - boolean isMerge(int cityId, Map<Integer, Integer[]> virtualCityMap, Integer deptCityId)
+    + AbstractOrderConfirmRemoteParamBuilder pickLongitude(Double pickLongitude)
+    + AbstractOrderConfirmRemoteParamBuilder pickLatitude(Double pickLatitude)
+    + AbstractOrderConfirmRemoteParamBuilder returnLongitude(Double returnLongitude)
+    + AbstractOrderConfirmRemoteParamBuilder returnLatitude(Double returnLatitude)
+    + AbstractOrderConfirmRemoteParamBuilder memberId(Integer memberId)
+    + AbstractOrderConfirmRemoteParamBuilder vehicleModelId(Integer vehicleModelId)
+    + <T extends AbstractOrderConfirmRemoteParamBuilder> T to(Class<T> clazz)
+}
+
+CarAdminApiClient ..> GetDeptDetailRE
+GetDeptDetailRE ..> AbstractOrderConfirmRemoteParamBuilder
+SrmsConstant ..> AbstractOrderConfirmRemoteParamBuilder
+ToOrderConfirmParam ..> AbstractOrderConfirmRemoteParamBuilder
+
+class OrderRemoteParaBuilder extends AbstractOrderConfirmRemoteParamBuilder{
+    - Integer rentType; 租赁方式 [正常租赁、顺风车、试驾...]
+    - Integer depositPayType; 押金预授权方式 [押金、预授权...]
+    - String sendCarAddress; 上门送车地址
+    - String fetchCarAddress; 上门取车地址
+    - Integer productType; 产品类型 TODO?? WHERE USE?
+    - Integer origin; 数据来源 [门店、APP、WAP...]
+    - Integer isToyotaPre; 丰田预售 TODO??
+    - Integer convenienceId; 顺风车ID
+    - List<BanlanceItemRemotePara> balanceItems; 增值服务
+
+    + {static} OrderRemoteParaBuilder of()
+    + OrderRemoteParaBuilder rentType(Integer type)
+    + OrderRemoteParaBuilder depositPayType(Integer depositPayType)
+    + OrderRemoteParaBuilder sendCarAddress(String sendCarAddress)
+    + OrderRemoteParaBuilder fetchCarAddress(String fetchCarAddress)
+    + OrderRemoteParaBuilder productType(String productType)
+    + OrderRemoteParaBuilder origin(Integer origin)
+    + OrderRemoteParaBuilder isToyotaPre(Integer isToyotaPre)
+    + OrderRemoteParaBuilder convenienceId(Integer convenienceId)
+    + OrderRemoteParaBuilder balanceItems(Collection<Integer> additional, List<BalanceItemPriceVOResult> additionFeeItems)
+
+    + OrderRemotePara build()
+}
+
+class ParamClassRemoteParaBuilder extends AbstractOrderConfirmRemoteParamBuilder {
+    - Integer rentTotalAmount; 日租金总金额
+    - Integer irrespectiveOfPercentage; 是否查询尊享服务费
+    - Integer gps; 是否查询GPS
+
+    - ParamClassRemoteParaBuilder(Integer rentTotalAmount, Integer irrespectiveOfPercentage, Integer gps)
+    + {static} ParamClassRemoteParaBuilder of(Integer rentTotalAmount, Integer irrespectiveOfPercentage, Integer gps)
+
+    + ParamClassRemotePara build()
+}
+
+class ParamClassRemotePara {
+    - Integer leaseDeptId; 取车门店ID
+    - Integer returnDeptId; 还车门店ID
+    - Date leaseDate; 取车时间
+    - Date returnDate; 还车时间
+    - Integer orderType; 租期类型 [日租、月租、套餐...]
+    - Integer leaseCityId; 取车城市ID
+    - Integer returnCityId; 还车城市ID
+    - Double pickLongitude; 取车经度
+    - Double pickLatitude; 取车纬度
+    - Double returnLongitude; 还车经度
+    - Double returnLatitude; 还车纬度
+    - Integer memberId; 会员ID
+    - Integer vehicleModelId; 车型ID
+    - Integer rentTotalAmount; 日租金总金额
+    - Integer irrespectiveOfPercentage; 是否查询尊享服务费
+    - Integer gps; 是否查询GPS
+    getter()
+    setter()
+}
+
+class OrderRemotePara {
+    - Integer leaseDepartment; 取车门店ID
+    - Integer returnDepartment; 还车门店ID
+    - Date leaseDate; 取车时间
+    - Date returnDate; 还车时间
+    - Integer orderType; 租期类型 [日租、月租、套餐...]
+    - Integer leaseCityId; 取车城市ID
+    - Integer returnCityId; 还车城市ID
+    - double getCarLatitude; 取车经度
+    - double getCarLongitude; 取车纬度
+    - double returnCarLatitude; 还车经度
+    - double returnCarLongitude; 还车纬度
+    - Integer memberId; 会员ID
+    - Integer vehicleModeId; 车型ID
+    - Integer rentType; 租赁方式 [正常租赁、顺风车、试驾...]
+    - Integer depositePayType; 押金预授权方式 [押金、预授权...]
+    - String sendCarAddress; 上门送车地址
+    - String fetchCarAddress; 上门取车地址
+    - Integer productType; 产品类型 TODO?? WHERE USE?
+    - Integer origin; 数据来源 [门店、APP、WAP...]
+    - Integer isToyotaPre; 丰田预售 TODO??
+    - Integer convenienceId; 顺风车ID
+    - List<BanlanceItemRemotePara> banlanceItems; 增值服务
+}
+
+ParamClassRemoteParaBuilder --> ParamClassRemotePara
+OrderRemoteParaBuilder --> OrderRemotePara
+
+class SrmsClient1 {
+    + {static} OrderPriceRemoteResult getOrderPricesInfo(ParamClassRemotePara params)
+}
+
+class SrmsClient2 {
+    + {static} OrderConfirmRemoteRe orderConfirm(OrderRemotePara params)
+}
+
+ParamClassRemotePara ..> SrmsClient1
+OrderRemotePara ..> SrmsClient2
+
+
+class OrderPriceRemoteResult {
+    - Boolean isBusinessCustomerEmp=false;
+    - List<BalanceItemPriceVOResult> additionFeeItems;
+}
+
+SrmsClient1 --> OrderPriceRemoteResult
+OrderPriceRemoteResult ..> PriceResultSplitVo
+SrmsSendOrGetCarService ..> SendOrGetCarVO
+SendOrGetCarVO ..> PriceResultSplitVo
+
+ServiceFeeBuilderFactory ..> PriceResultSplitVo
+ServiceFeeBuilderFactory --> ServiceFeeBuilder
+PriceResultSplitVo .up.> OrderRemoteParaBuilder
+PriceResultSplitVo ..> OrderConfirmInfoResultBuilder
+
+
+class SrmsSendOrGetCarService {
+    ResultObj<SendOrGetCarVO> sendOrGetCarInfo(Integer takeCarCityId, Integer sendCarCityId, Integer isSendCarIsOpen)
+}
+
+class SendOrGetCarVO {
+    - String doublePromotionFormat;
+    - String doublePromotionValue;
+    - String singlePromotionValue;
+
+    getter()
+    setter()
+}
+
+class ServiceFeeBuilderFactory {
+    + {static} ServiceFeeBuilder create(BalanceItemPriceVOResult item, boolean isVisitingServiceLeaseAndReturn, SendOrGetCarVO sendOrGetCarVO)
+}
+
+class ServiceFeeBuilder {
+    # static final String VISITINGPICK_XNAME = "送车上门服务费";
+
+    # String xname;
+    # String xcode;
+    # String desStr;
+    # String priceDesc;
+    - double price;
+    # BalanceItemPriceVOResult item;
+
+    + ServiceFeeBuilder(BalanceItemPriceVOResult item)
+
+    - void xcode()
+    # void xname()
+    # void desStr()
+    # void priceDesc()
+    - void price()
+    # int getXnumber()
+
+    + ServiceFeeBuilder set()
+
+    + ServiceFeeDTO bulid()
+}
+
+class DiffCityServiceFeeBuilder extends ServiceFeeBuilder {
+
+    + DiffCityServiceFeeBuilder(BalanceItemPriceVOResult item)
+    # void priceDesc()
+}
+
+class VisitingPickServiceFeeBuilder extends ServiceFeeBuilder {
+
+    + VisitingPickServiceFeeBuilder(BalanceItemPriceVOResult item)
+    # void xname()
+}
+
+class VisitingLeaseAndReturnServiceFeeBuilder extends ServiceFeeBuilder {
+
+    - static final Map<String, String> VISITING_MAP = new HashMap<String, String>();
+
+    - boolean isVisitingServiceLeaseAndReturn;
+    - boolean isDoublePromotionFormat;
+    - String doublePromotionValue;
+    - String singlePromotionValue;
+
+    + VisitingLeaseAndReturnServiceFeeBuilder(BalanceItemPriceVOResult item, boolean isVisitingServiceLeaseAndReturn, SendOrGetCarVO sendOrGetCarVO)
+
+    # void xname()
+    # void desStr()
+    # void priceDesc()
+    # int getXnumber()
+
+}
+
+
+
+class PriceResultSplitVo {
+    static final List<String> VISITING_LIST = new ArrayList<String>();
+
+    - boolean isVisitingServiceLeaseAndReturn; 是否同时免上门送车、取车费
+    - List<BalanceItemPriceVOResult> additionFeeItems; 价格预估信息
+    - SendOrGetCarVO sendOrGetCarVO; 取送车范围信息
+    - List<Integer> necessaryXcodes; 必选Xcode
+    - List<ServiceFeeDTO> serviceFees; 可选服务信息
+
+    + PriceResultSplitVo(List<BalanceItemPriceVOResult> additionFeeItems, ResultObj<SendOrGetCarVO> sendOrGetCarInfo)
+
+    - void isVisitingServiceLeaseAndReturn()
+    + PriceResultSplitVo split()
+    + List<Integer> getNecessaryXcodes()
+    + List<ServiceFeeDTO> getServiceFees()
+}
+
+
+
+
+class OrderConfirmRemoteRe {
+    - List<Mode> modeList;
+    - String preferrenceCode;
+    - List<BalanceItemPriceVOResult> additionFeeItems;
+    - Integer isChainStore;
+    - Integer payAbleAmount;
+    - Integer advancePayAbleAmount; 必付先付款应付金额
+    - List<BalanceItemPriceVOResult> additionFeeItems;
+    - Integer isMutilCancleMember;
+    - Integer totalAmount;
+    - Integer takeMode; 取车方式，默认为门店自取
+    - Integer returnMode; 还车方式，默认为门店自取
+    - Integer depositPayAbleAmount; 押金预授权金额
+
+    getter()
+    setter()
+}
+
+SrmsClient2 --> OrderConfirmRemoteRe
+
+class PricePreferenceSplitVo {
+
+    - static final List<String> SPECIAL_CODES = new ArrayList<String>();
+
+    - List<BalanceItemPriceVOResult> additionFeeItems;
+    - List<Mode> modeList;
+    - String preferenceCode;
+    - double preDiscountPrice = 0D; 订单优惠价格
+    - int preDiscountDay = 0; 优惠数量
+    - List<PreferrenceDTO> preferences = new ArrayList<>(); 优惠活动减免
+    - List<BasicsPriceDTOVo> basicsPriceDtoVos = new ArrayList<>(); 各服务项
+
+    + PricePreferenceSplitVo(List<BalanceItemPriceVOResult> additionFeeItems, List<Mode> modeList, String preferenceCode)
+    - void preDiscount()
+
+    + PricePreferenceSplitVo split()
+    - String getPriceDesc(String priceDesc, String xcode, int xnumber)
+    - String getPriceStr(String xcode, Double totalPrice)
+    + List<PreferrenceDTO> getPreferences()
+    + List<BasicsPriceDTOVo> getBasicsPriceDtoVos()
+}
+
+OrderConfirmRemoteRe ..> PricePreferenceSplitVo
+OrderConfirmRemoteRe ..> OrderConfirmInfoResultBuilder
+PricePreferenceSplitVo ..> OrderConfirmInfoResultBuilder
+ToOrderConfirmParam ..> OrderConfirmInfoResultBuilder
+
+class OrderConfirmInfoResultBuilder {
+    - {static} final int SPECIAL-CITY-ID = 6;
+    - {static} final String ALIAS-NAME-SHANGHAI = "沪";
+    - {static} final List<String> BALANCE-ITEM-CODES;
+
+    - boolean isChain; 是否加盟店
+    - boolean isHavePayAbleAmount; 是否有预付款
+    - boolean isHaveAdvancePayAbleAmount; 是否有先付款
+    - boolean isContainsPreToyota; 是否包含PreToyota
+    - boolean isHoliday; 是否春节或者国庆
+    - boolean isProductTypeIsOne = false; 产品类型是否为1
+    - boolean isAllTotalAmountOnlyOne; 总价格是为1
+    - boolean isMultiCancelMember; 是否多次取消
+    - boolean isVisitingService = false; 是否上门服务 TODO 类型不一致 一定false
+
+    - Integer isBusinessCustomerEmp; 客户类型
+    - String orderNote; 提示信息
+    - String cancelRuleNotify; 取消修改规则
+    - String takeDesc; 订单确认页处理取车须知
+    - String payPriorityHint; 优先使用账户余额/储值卡/积分支付提示
+    - List<PreferrenceDTO> preference; 优惠活动减免
+    - List<ServiceFeeDTO> serviceFee; 可选的增值服务
+    - List<BasicsPriceDTO> basicsPrice; 各服务项
+    - String userNoteRemarks; 城市规则
+    - VehicleInfoDTO vehicleInfo; 车辆信息
+    - FreeDepositInfo freeDepositInfo; 处理芝麻相关
+    - String payAbleAmount; 预付金额
+    - String amountType; 金额类型
+    - String amountMoney;
+    - String enterpriseUseCarTips; 特殊提示
+    - String warmPromptTips; 温馨提示
+    - ReturnMoney returnMoney; 返现信息
+    - String amountDesc; 支付类型文案详情
+    - boolean chainStore; 是否加盟店
+    - String totalAmount; 总金额
+    - String contractUrl; 联系URL
+
+    + {static} OrderConfirmInfoResultBuilder of()
+
+    + OrderConfirmInfoResultBuilder isChain(Integer isChainStore)
+    + OrderConfirmInfoResultBuilder isHavePayAbleAmount(Integer payAbleAmount)
+    + OrderConfirmInfoResultBuilder isHaveAdvancePayAbleAmount(Integer advancePayAbleAmount)
+    + OrderConfirmInfoResultBuilder isContainsPreToyota(List<BalanceItemPriceVOResult> list)
+    + OrderConfirmInfoResultBuilder isHoliday(String takeDate, String returnDate)
+    + OrderConfirmInfoResultBuilder isAllTotalAmountOnlyOne(Integer allTotalAmount)
+    + OrderConfirmInfoResultBuilder isMultiCancelMember(Integer isMultiCancelMember)
+    + OrderConfirmInfoResultBuilder isBusinessCustomerEmp(Boolean isBusinessCustomerEmp, Integer isChain, Integer type, boolean isCustomer)
+    + OrderConfirmInfoResultBuilder orderNote(Integer payAbleAmount, Integer totalAmount, Integer orderType)
+    + OrderConfirmInfoResultBuilder cancelRuleNotify(OrderRemotePara orderRemotePara, Integer isMutilCancleMember, Integer takeMode, Integer returnMode, Integer payAbleAmount)
+    + OrderConfirmInfoResultBuilder takeDesc(String idType, Integer depositPayAbleAmount)
+    + OrderConfirmInfoResultBuilder payPriorityHint(String payPriorityHint)
+    + OrderConfirmInfoResultBuilder preference(List<BalanceItemPriceVOResult> preference, int convenienceId)
+    + OrderConfirmInfoResultBuilder serviceFee(List<BalanceItemPriceVOResult> additionFeeItems, int convenienceId)
+    - ServiceFeeDTO getServiceFeeDTO(BalanceItemPriceVOResult prResult)
+    + OrderConfirmInfoResultBuilder basicsPrice(List<BalanceItemPriceVOResult> additionFeeItems, int convenienceId)
+    + OrderConfirmInfoResultBuilder userNoteRemarks(List<Mode> modeList, int takeCityId, int returnCityId, int vehicleId)
+    + OrderConfirmInfoResultBuilder vehicleInfo(List<Mode> modeList, int takeCityId, int returnCityId, List<CityTO> cityList, String fetchCarAddress, String sendCarAddress)
+    - String getVehicleModelDetail(String vehicleModeDetail, Integer modeCapacity)
+    - String getVirtualCityName(int cityId, List<CityTO> cityList, String defaultCityName)
+    + OrderConfirmInfoResultBuilder freeDepositInfo(Integer depositPayAbleAmount, String appVersion, long memberId)
+    + OrderConfirmInfoResultBuilder payAbleAmount(Integer payAbleAmount)
+    + OrderConfirmInfoResultBuilder amountType()
+    + OrderConfirmInfoResultBuilder amountMoney(Integer payAbleAmount, Integer totalAmount)
+    + OrderConfirmInfoResultBuilder enterpriseUseCarTips(Integer type, boolean isCustomer)
+    + OrderConfirmInfoResultBuilder warmPromptTips(Integer type)
+    + OrderConfirmInfoResultBuilder returnMoney(Integer type, int vehicleId, Double refundableAmountOfTryDrive)
+    + OrderConfirmInfoResultBuilder chainStore(Integer isChainStore)
+    + OrderConfirmInfoResultBuilder totalAmount(Integer totalAmount)
+    + OrderConfirmInfoResultBuilder contractUrl(String contractUrl)
+
+    + OrderConfirmInfoResult build()
+
+}
+
+class OrderConfirmInfoResult {
+    - String enterpriseUseCarTips;
+    - Integer isBusinessCustomerEmp;
+    - ReturnMoney returnMoney;
+    - String warmPromptTips;
+    - String amountDesc;
+    - String amountMoney;
+    - String amountType;
+    - String cancelRuleNotify;
+    - boolean isChainStore;
+    - String orderNote;
+    - String payAbleAmount;
+    - String payPriorityHint;
+    - String takeDesc;
+    - String totalAmount;
+    - String userNoteRemarks;
+    - FreeDepositInfo freeDepositInfo;
+    - VehicleInfoDTO vehicleInfo;
+    - List<BasicsPriceDTO> basicsPrice;
+    - List<PreferrenceDTO> preferrence;
+    - List<ServiceFeeDTO> serviceFee;
+    - String contractURL;
+
+    getter()
+    setter()
+}
+
+OrderConfirmInfoResultBuilder -left-> OrderConfirmInfoResult
+
+@enduml

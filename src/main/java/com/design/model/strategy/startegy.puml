@@ -1,0 +1,34 @@
+@startuml
+
+class Context {
+
+    - IStrategy strategy;
+
+    + Context(IStrategy strategy)
+
+    + int compute(int x,int y)
+}
+
+Context o.. IStrategy
+
+interface IStrategy {
+    int operation(int x, int y)
+}
+
+class AddStrategy implements IStrategy {
+    + int operation(int x, int y)
+}
+
+class SubtractStrategy implements IStrategy {
+    + int operation(int x, int y)
+}
+
+class MultiplyStrategy implements IStrategy {
+    + int operation(int x, int y)
+}
+
+class DivideStrategy implements IStrategy {
+    + int operation(int x, int y)
+}
+
+@enduml
