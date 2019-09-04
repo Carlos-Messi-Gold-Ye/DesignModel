@@ -1,0 +1,29 @@
+@startuml
+
+interface IOrder {
+    void orderInfo();
+}
+
+class BasisOrder implements IOrder{
+    + void orderInfo()
+}
+
+abstract class DecoratorOrder implements IOrder{
+    - IOrder order;
+    + DecoratorOrder(IOrder order)
+    + void orderInfo()
+}
+
+DecoratorOrder o.. IOrder
+
+class FranchiseeOrder extends DecoratorOrder{
+    + FranchiseeOrder(IOrder order)
+    + void orderInfo()
+}
+
+class BigCustomerOrder extends DecoratorOrder{
+    + BigCustomerOrder(IOrder order)
+    + void orderInfo()
+}
+
+@enduml
