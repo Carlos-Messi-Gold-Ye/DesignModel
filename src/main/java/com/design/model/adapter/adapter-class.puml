@@ -1,0 +1,23 @@
+@startuml
+
+interface IAppleLine {
+
+    public void usbInputHeader();
+    public void aTypeOutputHeader();
+}
+
+interface IHuaweiLine {
+    public void usbInputHeader()
+    public void cTypeOutputHeader()
+}
+
+class FoxconnAppleLine implements IAppleLine {
+    public void usbInputHeader()
+    public void aTypeOutputHeader()
+}
+
+class HuaweiLineAdapter extends FoxconnAppleLine implements IHuaweiLine {
+    public void cTypeOutputHeader()
+}
+
+@enduml
