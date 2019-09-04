@@ -2,22 +2,22 @@
 
 interface IAppleLine {
 
-    public void usbInputHeader();
-    public void aTypeOutputHeader();
+    + void usbInputHeader();
+    + void aTypeOutputHeader();
 }
 
 interface IHuaweiLine {
-    public void usbInputHeader()
-    public void cTypeOutputHeader()
+    + void usbInputHeader()
+    + void cTypeOutputHeader()
 }
 
 class FoxconnAppleLine implements IAppleLine {
-    public void usbInputHeader()
-    public void aTypeOutputHeader()
+    + void usbInputHeader()
+    + void aTypeOutputHeader()
 }
 
 class HuaweiLineAdapter extends FoxconnAppleLine implements IHuaweiLine {
-    public void cTypeOutputHeader()
+    + void cTypeOutputHeader()
 }
 
 @enduml

@@ -10,16 +10,16 @@ interface IListener {
 }
 
 class ListenerAdaptor implements IListener{
-    public void onStart()
-    public void onCreate()
-    public void onChange()
-    public void onDelete()
-    public void onStop()
+    + void onStart()
+    + void onCreate()
+    + void onChange()
+    + void onDelete()
+    + void onStop()
 }
 
 class ListenerMonitor extends ListenerAdaptor{
-    public void onStart()
-    public void onStop()
+    + void onStart()
+    + void onStop()
 }
 
 @enduml
