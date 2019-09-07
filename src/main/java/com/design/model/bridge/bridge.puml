@@ -1,0 +1,44 @@
+@startuml
+
+abstract class AbstractDept {
+    - IVehicle vehicle;
+
+    + AbstractDept(IVehicle vehicle)
+
+    # abstract void type()
+    # abstract int discount();
+
+    + void rentalPostings()
+}
+
+class DirectDept extends AbstractDept {
+    + DirectDept(IVehicle vehicle)
+    # void type()
+    # int discount()
+}
+
+class FranchisedDept extends AbstractDept {
+    + FranchisedDept(IVehicle vehicle)
+    # void type()
+    # int discount()
+}
+
+interface IVehicle {
+    void affiliation();
+    int rental();
+}
+
+class BlocVehicle implements IVehicle{
+    + void affiliation()
+    + int rental()
+}
+
+class LeagueVehicle implements IVehicle{
+
+    + void affiliation()
+    + int rental()
+}
+
+AbstractDept o.right. IVehicle
+
+@enduml
