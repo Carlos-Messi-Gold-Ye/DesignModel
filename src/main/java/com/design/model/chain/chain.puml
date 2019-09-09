@@ -1,0 +1,61 @@
+@startuml
+
+interface IEmployee {
+    int leaveDays();
+    String reason();
+}
+
+class ZucheEmployee implements IEmployee{
+    - int days;
+    - String reason;
+
+    + ZucheEmployee(int days, String reason)
+    + int leaveDays()
+    + String reason()
+}
+
+IEmployee .right.> ILeader
+
+interface ILeader {
+    void setSuperior(ILeader superiorLeaders);
+    String approval(IEmployee employee);
+}
+
+ILeader --> ILeader
+
+abstract class AbstractLeader implements ILeader {
+    - ILeader superiorLeaders;
+    + final void setSuperior(ILeader superiorLeaders)
+    + final String approval(IEmployee employee)
+    # abstract int limitDays()
+    # abstract String suggestion()
+}
+
+class GroupLeader extends AbstractLeader {
+    - static final int GROUP_DAYS = 3;
+
+    # int limitDays()
+    # String suggestion()
+}
+
+class DirectorLeader extends AbstractLeader {
+    - static final int DIRECTOR_DAYS = 7;
+
+    # int limitDays()
+    # String suggestion()
+}
+
+class CeoLeader extends AbstractLeader {
+    - final static int CEO_DAYS = 15;
+
+    # int limitDays()
+    # String suggestion()
+}
+
+class ShareholderLeader extends AbstractLeader {
+    - final static int SHAREHOLDER_DAYS = Integer.MAX_VALUE;
+    # int limitDays()
+    # String suggestion()
+}
+
+@enduml
