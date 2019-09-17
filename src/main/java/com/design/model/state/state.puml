@@ -1,0 +1,51 @@
+
+@startuml
+class Context {
+
+    public static final IState IN_SHOP = new InShopState();
+    public static final IState REPAIRING = new RepairingState();
+    public static final IState RENT = new RentState();
+    private IState state;
+
+    public IState getState()
+    public void setState(IState state)
+    public void inShop()
+    public void repairing()
+    public void rent()
+}
+
+
+Context o.right. IState
+Context .right.> IState
+
+interface IState {
+    void setContext(Context context);
+    void inShop();
+    void repairing();
+    void rent();
+}
+
+abstract class AbstractState implements IState{
+    protected Context context;
+    public final void setContext(Context context)
+}
+
+class InShopState extends AbstractState {
+    public void inShop()
+    public void repairing()
+    public void rent()
+}
+
+class RentState extends AbstractState {
+    public void inShop()
+    public void repairing()
+    public void rent()
+}
+
+class RepairingState extends AbstractState {
+    public void inShop()
+    public void repairing()
+    public void rent()
+}
+
+@enduml
