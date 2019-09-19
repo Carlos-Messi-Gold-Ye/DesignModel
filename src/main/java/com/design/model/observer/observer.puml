@@ -1,0 +1,33 @@
+@startuml
+
+interface IObserverable {
+    void addObserver(IObserver observer)
+    void deleteObserver(IObserver observer)
+    void notifyObservers()
+}
+
+class Children implements IObserverable {
+    private List<IObserver> observers = new ArrayList<>();
+    private boolean isWake = false;
+    public void setWake(boolean wake)
+    public void addObserver(IObserver observer)
+    public void deleteObserver(IObserver observer)
+    public void notifyObservers()
+}
+
+IObserverable o.right. IObserver
+
+interface IObserver {
+    void update(Object object)
+}
+
+class Father implements IObserver{
+    public void update(Object object)
+}
+
+class Mother implements IObserver{
+    public void update(Object object)
+}
+
+
+@enduml
